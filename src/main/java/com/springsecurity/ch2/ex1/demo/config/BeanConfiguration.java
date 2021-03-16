@@ -1,13 +1,15 @@
 package com.springsecurity.ch2.ex1.demo.config;
 
+import com.springsecurity.ch2.ex1.demo.model.User;
+import com.springsecurity.ch2.ex1.demo.service.InMemoryUserDetailsService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import java.util.List;
 
 @Configuration
 public class BeanConfiguration {
@@ -23,11 +25,8 @@ public class BeanConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService() {
-        var userDetailsService = new InMemoryUserDetailsManager();
-        var user = User.withUsername(userName).password(password).authorities(
-                authorities).build();
-        userDetailsService.createUser(user);
-        return userDetailsService;
+        return new InMemoryUserDetailsService(List.of(new User("John", "12345",
+                "read")));
     }
 
     @Bean
